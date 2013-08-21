@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Welcome!{% endblock %}</title>
+
+    {% block scripts %}
+        <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+        <script type="text/javascript"  src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+
+        {% javascripts '@WiechertDataTablesBundle/Resources/public/js/jquery-2.0.0.min.js'
+                       '@WiechertDataTablesBundle/Resources/public/js/jquery.dataTables.js'
+                       '@WiechertDataTablesBundle/Resources/public/js/bootstrap.min.js'%}
+              <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+    {% endblock %}
+    {% block stylesheets %}
+        {% stylesheets 'bundles/wiechertdatatables/css/*' filter='cssrewrite' %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+    {% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+</head>
+<body>
+{% block body %}{% endblock %}
+{% block javascripts %}{% endblock %}
+</body>
+</html>

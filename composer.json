@@ -1,0 +1,32 @@
+{
+    "name": "wiechert/datatables-bundle",
+    "type": "symfony-bundle",
+    "description": "Extension for easily generating datatables from Doctrine entities.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tayfun Wiechert",
+            "email": "tayfun.wiechert@gmail.com"
+        }
+    ],
+
+
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.2.*",
+        "doctrine/orm": "~2.2,>=2.2.3",
+        "doctrine/doctrine-bundle": "1.2.*",
+        "friendsofsymfony/jsrouting-bundle": "~1.1",
+        "twig/extensions":  "~1.0",
+        "jms/serializer-bundle": "0.11",
+        "mopa/bootstrap-bundle": "dev-master"
+    },
+   
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": { "Wiechert\\DataTablesBundle": "" }
+    },
+    "target-dir": "Wiechert/DataTablesBundle"
+
+
+}

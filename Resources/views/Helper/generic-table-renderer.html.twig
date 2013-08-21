@@ -1,0 +1,19 @@
+{% extends '::base.html.twig' %}
+{% block title %}Übersicht {{ entity }}{% endblock %}
+{% block headerscripts %}
+    {{ parent() }}
+  {#
+  {% javascripts '@WiechertCoreBundle/Resources/public/js/basic/ModalBoxRenderer.js'
+    '@WiechertCoreBundle/Resources/public/js/basic/SimpleDialogRenderer.js'%}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+
+  #}
+{% endblock %}
+
+{% block headline %} <h3>  {{ title }} </h3>{% endblock %}
+{% block body %}
+    {% render url('wiechert_core_get_generic_table', {'bundle': bundle, 'entity': entity, 'strategy': strategy, 'ajax': true } ) %}
+
+{% endblock %}

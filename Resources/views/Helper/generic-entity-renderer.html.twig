@@ -1,0 +1,36 @@
+{% extends '::base.html.twig' %}
+{% block title %}Übersicht {% endblock %}
+{% block headline %} <h2> Detailansicht für {{ entityName }}  identifiziert durch ID: "{{ id }}" </h2>{% endblock %}
+
+{% block headerscripts %}
+    {{ parent() }}
+   {% endblock %}
+
+
+{% block body %}
+
+    <h3>Properties</h3>
+    {{ entityDisplayer.generateHTMLCode()|  raw }}
+
+    <br>
+    <br>
+
+    {% for name, namedDatatable in namedDatatables %}
+        <h3>{{ namedDatatable.title }}</h3>
+
+        {% render url('wiechert_core_get_generic_named_table', {
+        'strategy': strategy,
+        'bundle': bundle,
+        'entity': entityName,
+        'name': name,
+        'id': id
+        }) %}
+        <br>
+        <br>
+
+    {% endfor %}
+
+{% endblock %}
+
+
+

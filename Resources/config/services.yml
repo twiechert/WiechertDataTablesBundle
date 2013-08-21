@@ -1,0 +1,46 @@
+services:
+    doctrine.common.annoations.annotationreader:
+              class:  Doctrine\Common\Annotations\AnnotationReader
+              public: false
+
+    doctrine.common.annoations.filecachreader:
+            class:  Doctrine\Common\Annotations\FileCacheReader
+            arguments:    [@doctrine.common.annoations.annotationreader, "%kernel.root_dir%/cache/dev", "true"]
+            public: false
+
+    wiechert.datatables.tablegenerator.tablegenerator:
+            parent: wiechert.datatables.tablegenerator.displayer
+            class:       Wiechert\DataTablesBundle\TableGenerator\TableGenerator
+            scope: request
+
+    wiechert.datatables.tablegenerator.entitydisplayer:
+            parent: wiechert.datatables.tablegenerator.displayer
+            class:       Wiechert\DataTablesBundle\TableGenerator\EntityDisplayer
+            scope: request
+
+    wiechert.datatables.tablegenerator.displayer:
+            class:       Wiechert\DataTablesBundle\TableGenerator\Displayer
+            abstract: true
+            scope: request
+            calls:
+             - [setReflector, ["@wiechert.datatables.tablegenerator.entityreflection.reflector"]]
+
+    wiechert.datatables.tablegenerator.entityreflection.reflector:
+            class:       Wiechert\DataTablesBundle\TableGenerator\EntityReflection\Reflector
+            scope: request
+            calls:
+               - [setEntityReflectionFactory, ["@wiechert.datatables.tablegenerator.entityreflection.creation.entityreflectionfactory"]]
+               - [setReflectionContextFactory, ["@wiechert.datatables.tablegenerator.entityreflection.creation.reflectioncontextfactory"]]
+
+    wiechert.datatables.tablegenerator.entityreflection.creation.entityreflectionfactory:
+            class:      Wiechert\DataTablesBundle\TableGenerator\EntityReflection\Creation\EntityReflectionFactory
+            arguments:
+                reader:         @wiechert.datatables.tablegenerator.entityreflection.reader.annotationreader
+
+    wiechert.datatables.tablegenerator.entityreflection.reader.annotationreader:
+            class:      Wiechert\DataTablesBundle\TableGenerator\EntityReflection\Reader\AnnotationReader
+            arguments:
+                reader:         @doctrine.common.annoations.filecachreader
+
+    wiechert.datatables.tablegenerator.entityreflection.creation.reflectioncontextfactory:
+            class:      Wiechert\DataTablesBundle\TableGenerator\EntityReflection\Creation\ReflectionContextFactory

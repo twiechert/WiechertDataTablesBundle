@@ -1,0 +1,69 @@
+{% extends "WiechertDataTablesBundle::base.html.twig" %}
+{% block scripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        {{ tableGenerator.generateJavaSctipt()|  raw }}
+    </script>
+
+    {% set assets = tableGenerator.getJavaScriptAssets() %}
+
+    {% for vasset in assets %}
+        <script src="{{ asset(vasset) }}"></script>
+    {% endfor %}
+
+{% endblock %}
+{% block body %}
+    {{ tableGenerator.generateHTMLCode() | raw }}
+
+    {# Select zur Auswahl globaler Actions#}
+    {% if tableGenerator.getOption('globalActions')%}
+        {% if tableGenerator.hasGlobalJavaScriptActions() or tableGenerator.hasGlobalPhpActions %}
+
+            {% block global_action %}
+                <br>
+                <br>
+                <div class="btn-group">
+                    <button class="btn btn-primary">Aktion auf markierte Einträge anwenden</button>
+                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+
+                        {% if tableGenerator.hasGlobalPhpActions %}
+                            {% block global_php_actions %}
+                                {% set phpActions = tableGenerator.getGlobalPhpActions() %}
+
+                                {% for phpAction in phpActions %}
+                                    {#  Routing.generate('".$phpAction['route']."',  {bundle : '".$this->repositoryName."', entity : '".$this->getRealEntityName()."', id : data}) +' \">".$phpAction['name']."</a></li>";
+            #}
+                                    <li>
+                                        <a href="{{ path(phpAction.route, {'bundle' : tableGenerator.repositoryName, 'entity': tableGenerator.getRealEntityName()}) }}">{{ phpAction.name }}</a>
+                                    </li>
+                                {% endfor %}
+
+                            {% endblock %}
+                        {% endif %}
+
+                        {% if tableGenerator.hasGlobalJavaScriptActions %}
+                            {% block global_js_actions %}
+                                {% set jsActions = tableGenerator.getGlobalJavaScriptActions() %}
+
+                                {% for jsAction in jsActions %}
+                                    {#  $javaScript.=  "<li><a onclick=\"".$jsAction["function"]."(\'Extended\', \'".$this->repositoryName."\',\'".$this->getRealEntityName()."\', \''+data+'\')\" >".$jsAction['name']."</a></li>";
+        #}
+                                    <li>
+                                        <a onclick="{{ jsAction.function }}('dataTable_{{ tableGenerator.getUniqueId() }}', 'Extended','{{ tableGenerator.repositoryName }}','{{ tableGenerator.getRealEntityName }}')"
+                                           href="#">{{ jsAction.name }}</a></li>
+                                {% endfor %}
+
+                            {% endblock %}
+                        {% endif %}
+                    </ul>
+                </div>
+            {% endblock %}
+
+        {% endif %}
+    {% endif %}
+
+
+{% endblock %}
