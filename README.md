@@ -270,3 +270,13 @@ The given configuration allows the bundle to display all subcategories of a give
 Simply configure a chain of Left-Joins, starting from the entity you actually want to display(!).
 
 
+###3. Display your DataTables:
+
+The route is: `http://local.test/app_dev.php/~/datatable/generate/{bundle}/{entity}/{strategy}`
+
+- bundle, entity: as configured
+- strategy: name of exclusion strategy (predefined: Simple or Extended)
+
+(whereas ~ has be replaced by your defined suffix)
+
+Example: `http://local.test/app_dev.php/datatable/generate/WiechertDataTablesBundle/Category/Extended`
