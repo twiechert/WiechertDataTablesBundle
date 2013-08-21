@@ -12,12 +12,11 @@ Extension for easily generating datatables from Doctrine entities.
 
 
 
-
 # Example
 
 ###1. Annotate your entities:
 
-There is an entity `Category` that points to the user who is its creator. We use the dafault Doctrine annotations and an annotation called `DisplayName` plus `Groups`.
+There could be an entity `Category` that points to the user who is its creator. We use the default Doctrine annotations and an annotation called `DisplayName` plus `Groups`.
 
 ```php
 <?php
@@ -136,7 +135,7 @@ To customize which attributes and entities will be displayed you can use exclusi
 	
 ###2. Create a configuration file:
 
-The bundle needs a configuration file that defines which entities can be displayed, how to find them.
+The bundle needs a configuration file that defines which entities can be displayed, where to find them, which actions can be applied and so on (see Configuration Reference)
 
 ```
 Datatables:
@@ -280,3 +279,59 @@ The route is: `http://local.test/app_dev.php/~/datatable/generate/{bundle}/{enti
 (whereas ~ has be replaced by your defined suffix)
 
 Example: `http://local.test/app_dev.php/datatable/generate/WiechertDataTablesBundle/Category/Extended`
+
+# Customize output
+
+###1. Usage of exclusion strategies
+
+Exclusion strategies affect the reflection process whilst deciding to skip a property (or class) or not.
+A popular approach is to define groups. And if a a property (or furthermore a member) does not belong to at least one of predefined groups, it is skipped.
+
+The abstract class `TreeGroupExclusionStrategy` expects subclasses to implement the methods `getGroups` and `getMaxDepth`.
+
+ - `getGroups`: has to return a multidimensional array of group names, whereas the first dimension matches the graph depth.
+
+
+The reference implementation `ExtendedStrategy` allows a max. graph depth of 3.
+
+```php
+namespace Wiechert\DataTablesBundle\TableGenerator\EntityReflection\Strategies;
+
+
+class ExtendedStrategy extends TreeGroupExclusionStrategy
+{
+    /**
+     * @return string[]
+     */
+    public  function getGroups()
+    {
+        return array ( array(parent::$idGruppe, parent::$simpleGruppe, parent::$simpleReferenceGruppe),
+                      array(parent::$idGruppe, parent::$simpleGruppe,  parent::$simpleReferenceGruppe), array(parent::$idGruppe, parent::$simpleGruppe));
+    }
+
+
+    /**
+     *
+     * @return int
+     */
+    public function getMaxDepth()
+    {
+        return 3;
+    }
+
+    /**
+     * Returns the name of the display strategy.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return "ExtendedStrategy";
+    }
+
+
+}
+```
+
+
+# Configuration Reference
