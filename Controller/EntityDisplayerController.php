@@ -9,7 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Yaml\Yaml;
 use Wiechert\DataTablesBundle\Serializer\TreeGroupExclusionStrategy;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Wiechert\DataTablesBundle\Util\ArrayAccessor;
@@ -38,7 +37,7 @@ class EntityDisplayerController extends Controller
             throw $this->createNotFoundException("Please configure the bundle '".$bundle."' in the datatables.yml first.'");
         }
 
-        $namedDatatables= ArrayAccessor::accessArray($bundleConfiguration, array($entity, 'NamedTables'));
+        $namedDatatables= ArrayAccessor::accessArray($bundleConfiguration, array('Tables', $entity, 'NamedTables'));
 
         $em = $this->getDoctrine()->getManager();
         $query = $em->createQueryBuilder()

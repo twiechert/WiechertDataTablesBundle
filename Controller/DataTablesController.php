@@ -9,7 +9,6 @@ namespace Wiechert\DataTablesBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Yaml\Yaml;
 use Wiechert\DataTablesBundle\Serializer\StrategyTypeAdapter;
 use Wiechert\DataTablesBundle\Serializer\TreeGroupExclusionStrategyTypeAdapter;
 use Wiechert\DataTablesBundle\TableGenerator\EntityReflection\Transformation\DoctrineQueryTransformer;
@@ -177,7 +176,7 @@ class DataTablesController extends Controller
         $reflector->setExclusionStrategy($exclusionStrategy);
 
         if ($name != null && $id != null) {
-            $namedDatatableConfiguration = ArrayAccessor::accessArray($bundleConfiguration, array($entity, 'NamedTables', $name));
+            $namedDatatableConfiguration = ArrayAccessor::accessArray($bundleConfiguration, array('Tables', $entity, 'NamedTables', $name));
             if ($namedDatatableConfiguration) {
 
 
@@ -192,9 +191,10 @@ class DataTablesController extends Controller
 
 
                 foreach ($joins as $join) {
-                    $queryBuilder->join($join[0], $join[1]);
+                    $queryBuilder->join($join['join'], $join['alias']);
                 }
             }
+
 
             $bundleConfigurationForNamedTable = ArrayAccessor::accessArray($config, array($select_bundle));
 
@@ -206,6 +206,7 @@ class DataTablesController extends Controller
             $reflector->setClass($bundleConfiguration['namespace'] . $entity);
             $reflector->reflect();
             $transformer = new DoctrineQueryTransformer($reflector->getBaseContext(), $em->getRepository($bundle . ':' . $entity), $attributes);
+
         }
 
         $result = $transformer->transform();
@@ -213,6 +214,9 @@ class DataTablesController extends Controller
         $objectQueryBuilder = $result['querybuilder'];
         $filteredCountQueryBuilder = $result['filtered-count-querybuilder'];
         $simpleCountQueryBuilder = $result['count-querybuilder'];
+
+        $dlq = $objectQueryBuilder->getDQL();
+        $slq = $objectQueryBuilder->getQuery()->getSQL();
 
         $objects = $objectQueryBuilder->getQuery()->getResult();
         $filtered_count = $filteredCountQueryBuilder->getQuery()->getSingleScalarResult();

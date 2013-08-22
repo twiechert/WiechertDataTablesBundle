@@ -16,17 +16,17 @@ wiechert_data_tables:
                     select_table:         "Category"
                     select_table_bundle:  "WiechertDataTablesBundle"
                     joins:
-                        - {join: "e0.rootcategory", alias: "f"}
-                    where_caluse:         "f.id = :id"
+                        - {join: "e0.rootcategory", alias: "a"}
+                    where_caluse:         "a.id = :id"
 
                get_rootcategories:
-                    title:               "root categories"
-                    description:         "get all root categories"
+                    title:               "root categorie"
+                    description:         "get the root categorie"
                     select_table:         "Category"
                     select_table_bundle:  "WiechertDataTablesBundle"
                     joins:
-                        - {join: "e0.subcategories",  alias:  "f"}
-                    where_caluse:         "f.id = :id"
+                        - {join: "e0.subcategories",  alias:  "a"}
+                    where_caluse:         "a.id = :id"
 
                get_products:
                     title:              "every product of this category"
@@ -34,8 +34,8 @@ wiechert_data_tables:
                     select_table:         "Product"
                     select_table_bundle:  "WiechertDataTablesBundle"
                     joins:
-                        - {join: "e0.categories",  alias:  "f"}
-                    where_caluse:         "f.id = :id"
+                        - {join: "e0.categories",  alias:  "a"}
+                    where_caluse:         "a.id = :id"
 
         Product:
             display_name:         "All the categories"
@@ -43,16 +43,26 @@ wiechert_data_tables:
             Actions:
                 PHPActions:
                    - {name: "Display", route: "wiechert_core_generic_entity_display"}
-
             NamedTables:
+               get_buyers:
+                    title:               "Buyer of this product"
+                    description:         "get all buyers"
+                    select_table:         "User"
+                    select_table_bundle:  "WiechertDataTablesBundle"
+                    joins:
+                         - {join: "e0.orders", alias: "a"}
+                         - {join: "a.positions", alias: "b"}
+                         - {join: "b.product", alias: "c"}
+                    where_caluse:         "c.id = :id"
+
                get_categories:
                     title:               "Categories of the product"
                     description:         "get all categories"
                     select_table:         "Category"
                     select_table_bundle:  "WiechertDataTablesBundle"
                     joins:
-                         - {join: "e0.products", alias: "f"}
-                    where_caluse:         "f.id = :id"
+                         - {join: "e0.products", alias: "a"}
+                    where_caluse:         "a.id = :id"
 
         Position:
                 display_name:         "All the categories"
@@ -60,6 +70,13 @@ wiechert_data_tables:
                 Actions:
                     PHPActions:
                        - {name: "Display", route: "wiechert_core_generic_entity_display"}
+
+        User:
+                  display_name:         "All the user"
+                  title:                "User overview"
+                  Actions:
+                      PHPActions:
+                         - {name: "Display", route: "wiechert_core_generic_entity_display"}
 
         Order:
                   display_name:         "All the order"
@@ -74,8 +91,8 @@ wiechert_data_tables:
                                       select_table:         "Position"
                                       select_table_bundle:  "WiechertDataTablesBundle"
                                       joins:
-                                           - {join: "e0.order", alias: "f"}
-                                      where_caluse:         "f.id = :id"
+                                           - {join: "e0.order", alias: "a"}
+                                      where_caluse:         "a.id = :id"
 
 
 

@@ -48,6 +48,14 @@ class User
     protected $categories;
 
 
+    /**
+     * @ORM\OneToMany(targetEntity="Order", mappedBy="user")
+     * @Serializer\Groups({"ComplexeReference"})
+     **/
+    protected $orders;
+
+
+
 
     /**
      * Constructor
@@ -121,5 +129,38 @@ class User
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Add orders
+     *
+     * @param \Wiechert\DataTablesBundle\Entity\Order $orders
+     * @return User
+     */
+    public function addOrder(\Wiechert\DataTablesBundle\Entity\Order $orders)
+    {
+        $this->orders[] = $orders;
+
+        return $this;
+    }
+
+    /**
+     * Remove orders
+     *
+     * @param \Wiechert\DataTablesBundle\Entity\Order $orders
+     */
+    public function removeOrder(\Wiechert\DataTablesBundle\Entity\Order $orders)
+    {
+        $this->orders->removeElement($orders);
+    }
+
+    /**
+     * Get orders
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrders()
+    {
+        return $this->orders;
     }
 }

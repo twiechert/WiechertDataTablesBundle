@@ -7,7 +7,6 @@
 namespace Wiechert\DataTablesBundle\TableGenerator;
 
 
-use Symfony\Component\Yaml\Yaml;
 use Wiechert\DataTablesBundle\TableGenerator\EntityReflection\IEntityReflector;
 use Wiechert\DataTablesBundle\TableGenerator\EntityReflection\IReflector;
 use Wiechert\DataTablesBundle\TableGenerator\EntityReflection\Transformation\CountPerEntityTransformer;

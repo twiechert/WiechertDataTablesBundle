@@ -1,16 +1,17 @@
 WiechertDataTablesBundle
 ========================
 
-Extension for easily generating datatables from Doctrine entities.
+Extension for easily generating DataTables from Doctrine entities.
 
 # Core Features
 
 - let the bundle generate DataTables for a given Doctrine entity
-- supports associations
-- use exclusion strategies to customize the ouput (which properties, max. graph depth)
+- use exclusion strategies to customize the output
 - define actions that can be applied to an entity/row
 
-
+TODO
+- describe installation
+- configuration reference
 
 # Example
 
@@ -116,12 +117,25 @@ namespace Wiechert\DataTablesBundle\Entity;
 		 protected $id;
 		 
 
-	   /**
-		* @ORM\Column(type="string", length=60)
-		* @Serializer\Groups({"Simple", "Name"})
-		* @DisplayName(name="Username")
-		*/
-		protected $username;
+         /**
+          * @ORM\Column(type="string", length=60)
+          * @Serializer\Groups({"Simple", "Name"})
+          * @DisplayName(name="Username")
+          */
+         protected $username;
+
+         /**
+          * @ORM\OneToMany(targetEntity="Category", mappedBy="creator")
+          * @Serializer\Groups({"ComplexeReference"})
+          **/
+         protected $categories;
+
+
+         /**
+          * @ORM\OneToMany(targetEntity="Order", mappedBy="user")
+          * @Serializer\Groups({"ComplexeReference"})
+          **/
+         protected $orders;
 
 		...
 		}
@@ -142,7 +156,7 @@ Reference the configuration file in you app/config.yml
 imports:
    - { resource: "@Bundle/Resources/config/yourfile.yml" }
 ```
-
+The configuration file for the scenario could look like:
 ```
 wiechert_data_tables:
     Datatables:
@@ -156,33 +170,33 @@ wiechert_data_tables:
                   Actions:
                     PHPActions:
                       - {name: "Display", route: "wiechert_core_generic_entity_display"}
-              NamedTables:
-                  get_subcategories:
-                      title:               "sub categories"
-                      description:         "get all sub categories"
-                      select_table:         "Category"
-                      select_table_bundle:  "WiechertDataTablesBundle"
-                      joins:
-                          - ["e0.rootcategory", "f"]
-                      where_caluse:         "f.id = :id"
+                  NamedTables:
+                      get_subcategories:
+                          title:               "sub categories"
+                          description:         "get all sub categories"
+                          select_table:         "Category"
+                          select_table_bundle:  "WiechertDataTablesBundle"
+                          joins:
+                              - {join: "e0.rootcategory", alias: "a"}
+                          where_caluse:         "a.id = :id"
 
-                  get_rootcategorie:
-                        title:               "root categorie"
-                        description:         "get  root categorie"
-                        select_table:         "Category"
-                        select_table_bundle:  "WiechertDataTablesBundle"
-                        joins:
-                            - ["e0.subcategories", "f"]
-                        where_caluse:         "f.id = :id"
+                      get_rootcategorie:
+                            title:               "root categorie"
+                            description:         "get  root categorie"
+                            select_table:         "Category"
+                            select_table_bundle:  "WiechertDataTablesBundle"
+                            joins:
+                                - {join: "e0.subcategories", alias: "a"}
+                            where_caluse:         "a.id = :id"
 
-                  get_products:
-                       title:              "every product of this category"
-                       description:        "list all producs of this category"
-                       select_table:         "Product"
-                       select_table_bundle:  "WiechertDataTablesBundle"
-                       joins:
-                          - ["e0.categories", "f"]
-                       where_caluse:         "f.id = :id"
+                      get_products:
+                           title:              "every product of this category"
+                           description:        "list all producs of this category"
+                           select_table:         "Product"
+                           select_table_bundle:  "WiechertDataTablesBundle"
+                           joins:
+                              - {join: "e0.categories", alias: "a"}
+                           where_caluse:         "a.id = :id"
 
               Product:
                   display_name:         "All the products"
@@ -197,19 +211,19 @@ wiechert_data_tables:
                                       select_table:         "Category"
                                       select_table_bundle:  "WiechertDataTablesBundle"
                                       joins:
-                                           - ["e0.products", "f"]
-                                      where_caluse:         "f.id = :id"
+                                           - {"e0.products", alias: "a"}
+                                      where_caluse:         "a.id = :id"
 
                      get_buyers:
-                           title:               "Buyery of this product
+                           title:               "Buyery of this product"
                            description:         "get all buyers"
                            select_table:         "User"
                            select_table_bundle:  "WiechertDataTablesBundle"
                            joins:
-                                - ["e0.orders", "e1"]
-                                - ["e1.positions", "e2"]
-                                - ["e2.product", "f"]
-                           where_caluse:         "f.id = :id"
+                                - {join: "e0.orders", alias: "a"}
+                                - {join: "a.positions", alias: "b"}
+                                - {join: "b.product", alias: "c"}
+                           where_caluse:         "c.id = :id"
 
               User:
                   display_name:         "All the users"
