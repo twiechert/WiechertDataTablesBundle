@@ -35,7 +35,7 @@ class SimpleStrategy extends TreeGroupExclusionStrategy
      */
     public function getName()
     {
-        return "SimpleStrategy";
+        return "Simple";
     }
 
 

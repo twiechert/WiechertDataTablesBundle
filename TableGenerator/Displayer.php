@@ -51,11 +51,15 @@ abstract class Displayer
      */
     protected $bundleConfig = null;
 
+    /**
+     * @var array
+     */
+    private $config = null;
+
 
     public function initialize()
     {
-        $config = Yaml::parse(__DIR__ . "/../Resources/config/datatables.yml");
-        $this->bundleConfig = ArrayAccessor::accessArray($config, array('Datatables', 'Bundles', $this->getBundleName()));
+        $this->bundleConfig = ArrayAccessor::accessArray($this->config, array($this->getBundleName()));
         $this->tableConfig = ArrayAccessor::accessArray($this->bundleConfig, array('Tables', $this->getEntityName()));
         $class = $this->bundleConfig['namespace'] . $this->getEntityName();
         $this->reflector->setClass($class);
@@ -144,5 +148,14 @@ abstract class Displayer
     {
         return $this->baseContext;
     }
+
+    /**
+     * @param array $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
 
 }

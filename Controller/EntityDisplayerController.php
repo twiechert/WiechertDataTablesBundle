@@ -30,15 +30,15 @@ class EntityDisplayerController extends Controller
      */
     public function displayEntityAction($strategy, $bundle, $entity, $id)
     {
-        $config = Yaml::parse(__DIR__."/../Resources/config/datatables.yml");
-        $bundleConfiguration  = ArrayAccessor::accessArray($config, array('Datatables', 'Bundles', $bundle));
+        $config = $this->container->getParameter('datatables.bundles');
+        $bundleConfiguration  = ArrayAccessor::accessArray($config, array($bundle));
 
         if(!$bundleConfiguration)
         {
             throw $this->createNotFoundException("Please configure the bundle '".$bundle."' in the datatables.yml first.'");
         }
 
-        $namedDatatables= ArrayAccessor::accessArray($bundleConfiguration, array('NamedTables', $entity));
+        $namedDatatables= ArrayAccessor::accessArray($bundleConfiguration, array($entity, 'NamedTables'));
 
         $em = $this->getDoctrine()->getManager();
         $query = $em->createQueryBuilder()
@@ -52,10 +52,19 @@ class EntityDisplayerController extends Controller
         try {
             $object = $query->getSingleResult();
             $entityDisplayer = $this->get('wiechert.datatables.tablegenerator.entitydisplayer');
+            $entityDisplayer->setConfig($config);
+
             $entityDisplayer->setBundleName($bundle);
             $entityDisplayer->setEntityName($entity);
 
-            $exclusionStrategy = "\\Wiechert\\DataTablesBundle\\TableGenerator\\EntityReflection\\Strategies\\".$strategy."Strategy";
+            $strategies = $this->container->getParameter('datatables.strategies');
+            if(array_key_exists($strategy, $strategies))
+            {
+                $exclusionStrategy = $strategies[$strategy];
+            } else {
+                $exclusionStrategy = $strategies['Default'];
+            }
+
             $exclusionStrategy = new $exclusionStrategy();
 
             $entityDisplayer->setEntity($object);

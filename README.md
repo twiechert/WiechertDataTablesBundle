@@ -135,86 +135,90 @@ To customize which attributes and entities will be displayed you can use exclusi
 	
 ###2. Create a configuration file:
 
-The bundle needs a configuration file that defines which entities can be displayed, where to find them, which actions can be applied and so on (see Configuration Reference)
+The bundle needs a configuration file that defines which entities can be displayed, where to find them, which actions can be applied and so on (see Configuration Reference).
+Reference the configuration file in you app/config.yml
 
 ```
-Datatables:
-	Bundles:
-	  WiechertDataTablesBundle:
-	    namespace: "Wiechert\\DataTablesBundle\\Entity\\"
-	    Tables:
-	      Category:
-	          display_name:         "All the categories"
-	          title:                "Category overview"
-	          Actions:
-	            PHPActions:
-	              - {name: "Display", route: "wiechert_core_generic_entity_display"}
-	
-	      Product:
-	          display_name:         "All the products"
-	          title:                "Product overview"
-	          Actions:
-	              PHPActions:
-	                 - {name: "Display", route: "wiechert_core_generic_entity_display"}
-	                 
-	      User:
-	          display_name:         "All the users"
-	          title:                "User overview"
-	          Actions:
-	              PHPActions:
-	                 - {name: "Display", route: "wiechert_core_generic_entity_display"}
-	
-	
-	    NamedTables:
-	      Category:
-	           get_subcategories:
-	                title:               "sub categories"
-	                description:         "get all sub categories"
-	                select_table:         "Category"
-	                select_table_bundle:  "WiechertDataTablesBundle"
-	                joins:
-	                    - ["e0.rootcategory", "f"]
-	                where_caluse:         "f.id = :id"
-	
-	           get_rootcategorie:
-	                title:               "root categorie"
-	                description:         "get  root categorie"
-	                select_table:         "Category"
-	                select_table_bundle:  "WiechertDataTablesBundle"
-	                joins:
-	                    - ["e0.subcategories", "f"]
-	                where_caluse:         "f.id = :id"
-	
-	           get_products:
-	                title:              "every product of this category"
-	                description:        "list all producs of this category"
-	                select_table:         "Product"
-	                select_table_bundle:  "WiechertDataTablesBundle"
-	                joins:
-	                    - ["e0.categories", "f"]
-	                where_caluse:         "f.id = :id"
-	 
-	
-	      Product:
-	           get_categories:
-	                title:               "Categories of the product"
-	                description:         "get all categories"
-	                select_table:         "Category"
-	                select_table_bundle:  "WiechertDataTablesBundle"
-	                joins:
-	                     - ["e0.products", "f"]
-	                where_caluse:         "f.id = :id" 
-	                
-	          get_buyers:
-	                title:               "Buyery of this product
-	                description:         "get all buyers"
-	                select_table:         "User"
-	                select_table_bundle:  "WiechertDataTablesBundle"
-	                joins:
-	                     - ["e0.orders", "e1"]
-	                     - ["e1.positions", "e2"]
-	                     - ["e2.product", "f"]
-	                where_caluse:         "f.id = :id" 
+imports:
+   - { resource: "@Bundle/Resources/config/yourfile.yml" }
+```
+
+```
+wiechert_data_tables:
+    Datatables:
+        Bundles:
+          WiechertDataTablesBundle:
+            namespace: "Wiechert\\DataTablesBundle\\Entity\\"
+            Tables:
+              Category:
+                  display_name:         "All the categories"
+                  title:                "Category overview"
+                  Actions:
+                    PHPActions:
+                      - {name: "Display", route: "wiechert_core_generic_entity_display"}
+              NamedTables:
+                  get_subcategories:
+                      title:               "sub categories"
+                      description:         "get all sub categories"
+                      select_table:         "Category"
+                      select_table_bundle:  "WiechertDataTablesBundle"
+                      joins:
+                          - ["e0.rootcategory", "f"]
+                      where_caluse:         "f.id = :id"
+
+                  get_rootcategorie:
+                        title:               "root categorie"
+                        description:         "get  root categorie"
+                        select_table:         "Category"
+                        select_table_bundle:  "WiechertDataTablesBundle"
+                        joins:
+                            - ["e0.subcategories", "f"]
+                        where_caluse:         "f.id = :id"
+
+                  get_products:
+                       title:              "every product of this category"
+                       description:        "list all producs of this category"
+                       select_table:         "Product"
+                       select_table_bundle:  "WiechertDataTablesBundle"
+                       joins:
+                          - ["e0.categories", "f"]
+                       where_caluse:         "f.id = :id"
+
+              Product:
+                  display_name:         "All the products"
+                  title:                "Product overview"
+                  Actions:
+                      PHPActions:
+                         - {name: "Display", route: "wiechert_core_generic_entity_display"}
+                  NamedTables:
+                     get_categories:
+                                      title:               "Categories of the product"
+                                      description:         "get all categories"
+                                      select_table:         "Category"
+                                      select_table_bundle:  "WiechertDataTablesBundle"
+                                      joins:
+                                           - ["e0.products", "f"]
+                                      where_caluse:         "f.id = :id"
+
+                     get_buyers:
+                           title:               "Buyery of this product
+                           description:         "get all buyers"
+                           select_table:         "User"
+                           select_table_bundle:  "WiechertDataTablesBundle"
+                           joins:
+                                - ["e0.orders", "e1"]
+                                - ["e1.positions", "e2"]
+                                - ["e2.product", "f"]
+                           where_caluse:         "f.id = :id"
+
+              User:
+                  display_name:         "All the users"
+                  title:                "User overview"
+                  Actions:
+                      PHPActions:
+                         - {name: "Display", route: "wiechert_core_generic_entity_display"}
+
+
 ```
 
 
@@ -258,7 +262,7 @@ An example:
 
 ####2.2 Define named Datatables
 
-A cool feature are named Datatables. These Datatables display additional information on a  certain entity.
+A good feature are named Datatables. These Datatables display additional information on a  certain entity.
 The given configuration allows the bundle to display all subcategories of a given category or all related products.
 
 #####Other scenarios:
@@ -285,11 +289,15 @@ Example: `http://local.test/app_dev.php/datatable/generate/WiechertDataTablesBun
 ###1. Usage of exclusion strategies
 
 Exclusion strategies affect the reflection process whilst deciding to skip a property (or class) or not.
-A popular approach is to define groups. And if a a property (or furthermore a member) does not belong to at least one of predefined groups, it is skipped.
+
+####1.1 Group-based exclusion strategies
+
+A popular approach is to define groups. So if a a property (or furthermore a member) does not belong to at least one of predefined groups, it is skipped.
 
 The abstract class `TreeGroupExclusionStrategy` expects subclasses to implement the methods `getGroups` and `getMaxDepth`.
 
  - `getGroups`: has to return a multidimensional array of group names, whereas the first dimension matches the graph depth.
+    The second dimension matches the groups allowed at that graph depth.
 
 
 The reference implementation `ExtendedStrategy` allows a max. graph depth of 3.
@@ -332,6 +340,9 @@ class ExtendedStrategy extends TreeGroupExclusionStrategy
 
 }
 ```
+####1.2 Other exclusion strategies
+
+You can implement the IExclusionStrategy `interface Wiechert\DataTablesBundle\TableGenerator\EntityReflection\Strategies\IExclusionStrategy`.
 
 
 # Configuration Reference

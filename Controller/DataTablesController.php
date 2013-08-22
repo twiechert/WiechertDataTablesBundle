@@ -32,11 +32,12 @@ class DataTablesController extends Controller
      */
     public function generateTableAction($bundle, $entity, $strategy)
     {
-        $config = Yaml::parse(__DIR__ . "/../Resources/config/datatables.yml");
-        $entityConfiguration = ArrayAccessor::accessArray($config, array('Datatables', 'Bundles', $bundle, 'Tables', $entity));
+        $config = $this->container->getParameter('datatables.bundles');
+        $entityConfiguration = ArrayAccessor::accessArray($config, array($bundle, 'Tables', $entity));
 
         if ($entityConfiguration) {
             $tableGenerator = $this->get('wiechert.datatables.tablegenerator.tablegenerator');
+            $tableGenerator->setConfig($config);
             $tableGenerator->setBundleName($bundle);
             $tableGenerator->setEntityName($entity);
             $options = ArrayAccessor::accessArray($entityConfiguration, array('options'));
@@ -51,7 +52,14 @@ class DataTablesController extends Controller
                 $tableGenerator->setOptions($this->getRequest()->query->get('options'));
             }
 
-            $strategy = "\\Wiechert\\DataTablesBundle\\TableGenerator\\EntityReflection\\Strategies\\" . $strategy . "Strategy";
+           $strategies = $this->container->getParameter('datatables.strategies');
+            if(array_key_exists($strategy, $strategies))
+            {
+                $strategy = $strategies[$strategy];
+            } else {
+                $strategy = $strategies['Default'];
+            }
+
             $exclusionStrategy = new $strategy();
 
             $tableGenerator->getReflector()
@@ -86,11 +94,12 @@ class DataTablesController extends Controller
      */
     public function generateNamedTableAction($bundle, $entity, $strategy, $name, $id)
     {
-        $config = Yaml::parse(__DIR__ . "/../Resources/config/datatables.yml");
-        $namedDatatableConfiguration = ArrayAccessor::accessArray($config, array('Datatables', 'Bundles', $bundle, 'NamedTables', $entity, $name));
+        $config = $this->container->getParameter('datatables.bundles');
+        $namedDatatableConfiguration =  ArrayAccessor::accessArray($config, array($bundle, 'Tables', $entity,  'NamedTables', $name));
 
         if ($namedDatatableConfiguration) {
             $tableGenerator = $this->get('wiechert.datatables.tablegenerator.tablegenerator');
+            $tableGenerator->setConfig($config);
 
 
             if (array_key_exists("select_table", $namedDatatableConfiguration)) {
@@ -111,7 +120,13 @@ class DataTablesController extends Controller
             $tableGenerator->setWhereParam($id);
             $tableGenerator->setDatatableName($name);
 
-            $strategy = "\\Wiechert\\DataTablesBundle\\TableGenerator\\EntityReflection\\Strategies\\" . $strategy . "Strategy";
+            $strategies = $this->container->getParameter('datatables.strategies');
+            if(array_key_exists($strategy, $strategies))
+            {
+                $strategy = $strategies[$strategy];
+            } else {
+                $strategy = $strategies['Default'];
+            }
 
             $tableGenerator->getReflector()
                 ->setExclusionStrategy(new $strategy());
@@ -146,17 +161,23 @@ class DataTablesController extends Controller
         $attributes = $request->query->all();
         $isNamedTable = false;
         $em = $this->getDoctrine()->getManager();
-        $config = Yaml::parse(__DIR__ . "/../Resources/config/datatables.yml");
-        $bundleConfiguration = ArrayAccessor::accessArray($config, array('Datatables', 'Bundles', $bundle));
+        $config = $this->container->getParameter('datatables.bundles');
+        $bundleConfiguration = ArrayAccessor::accessArray($config, array($bundle));
 
+        $strategies = $this->container->getParameter('datatables.strategies');
+        if(array_key_exists($strategy, $strategies))
+        {
+            $exclusionStrategy = $strategies[$strategy];
+        } else {
+            $exclusionStrategy = $strategies['Default'];
+        }
 
-        $strategy = "\\Wiechert\\DataTablesBundle\\TableGenerator\\EntityReflection\\Strategies\\" . $strategy;
-        $exclusionStrategy = new $strategy();
+        $exclusionStrategy = new $exclusionStrategy();
         $reflector = $this->get('wiechert.datatables.tablegenerator.entityreflection.reflector');
         $reflector->setExclusionStrategy($exclusionStrategy);
 
         if ($name != null && $id != null) {
-            $namedDatatableConfiguration = ArrayAccessor::accessArray($bundleConfiguration, array('NamedTables', $entity, $name));
+            $namedDatatableConfiguration = ArrayAccessor::accessArray($bundleConfiguration, array($entity, 'NamedTables', $name));
             if ($namedDatatableConfiguration) {
 
 
@@ -175,7 +196,7 @@ class DataTablesController extends Controller
                 }
             }
 
-            $bundleConfigurationForNamedTable = ArrayAccessor::accessArray($config, array('Datatables', 'Bundles', $select_bundle));
+            $bundleConfigurationForNamedTable = ArrayAccessor::accessArray($config, array($select_bundle));
 
             $reflector->setClass($bundleConfigurationForNamedTable['namespace'] . $select_entity);
             $reflector->reflect();

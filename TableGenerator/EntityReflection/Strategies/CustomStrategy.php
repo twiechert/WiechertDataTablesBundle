@@ -48,7 +48,7 @@ class CustomStrategy extends TreeGroupExclusionStrategy
      */
     public function getName()
     {
-        return "CustomStrategy";
+        return "Custom";
     }
 
 }

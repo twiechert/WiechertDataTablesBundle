@@ -37,7 +37,7 @@ class ExtendedStrategy extends TreeGroupExclusionStrategy
      */
     public function getName()
     {
-        return "ExtendedStrategy";
+        return "Extended";
     }
 
 

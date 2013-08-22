@@ -1,4 +1,4 @@
-Datatables:
+wiechert_data_tables:
   Bundles:
     WiechertDataTablesBundle:
       namespace: "Wiechert\\DataTablesBundle\\Entity\\"
@@ -9,6 +9,33 @@ Datatables:
             Actions:
               PHPActions:
                 - {name: "Display", route: "wiechert_core_generic_entity_display"}
+            NamedTables:
+               get_subcategories:
+                    title:               "sub categories"
+                    description:         "get all sub categories"
+                    select_table:         "Category"
+                    select_table_bundle:  "WiechertDataTablesBundle"
+                    joins:
+                        - {join: "e0.rootcategory", alias: "f"}
+                    where_caluse:         "f.id = :id"
+
+               get_rootcategories:
+                    title:               "root categories"
+                    description:         "get all root categories"
+                    select_table:         "Category"
+                    select_table_bundle:  "WiechertDataTablesBundle"
+                    joins:
+                        - {join: "e0.subcategories",  alias:  "f"}
+                    where_caluse:         "f.id = :id"
+
+               get_products:
+                    title:              "every product of this category"
+                    description:        "list all producs of this category"
+                    select_table:         "Product"
+                    select_table_bundle:  "WiechertDataTablesBundle"
+                    joins:
+                        - {join: "e0.categories",  alias:  "f"}
+                    where_caluse:         "f.id = :id"
 
         Product:
             display_name:         "All the categories"
@@ -16,6 +43,16 @@ Datatables:
             Actions:
                 PHPActions:
                    - {name: "Display", route: "wiechert_core_generic_entity_display"}
+
+            NamedTables:
+               get_categories:
+                    title:               "Categories of the product"
+                    description:         "get all categories"
+                    select_table:         "Category"
+                    select_table_bundle:  "WiechertDataTablesBundle"
+                    joins:
+                         - {join: "e0.products", alias: "f"}
+                    where_caluse:         "f.id = :id"
 
         Position:
                 display_name:         "All the categories"
@@ -30,55 +67,16 @@ Datatables:
                   Actions:
                       PHPActions:
                          - {name: "Display", route: "wiechert_core_generic_entity_display"}
+                  NamedTables:
+                     get_positions:
+                                      title:               "Positions of the order"
+                                      description:         "get all positions"
+                                      select_table:         "Position"
+                                      select_table_bundle:  "WiechertDataTablesBundle"
+                                      joins:
+                                           - {join: "e0.order", alias: "f"}
+                                      where_caluse:         "f.id = :id"
 
-      NamedTables:
-        Category:
-             get_subcategories:
-                  title:               "sub categories"
-                  description:         "get all sub categories"
-                  select_table:         "Category"
-                  select_table_bundle:  "WiechertDataTablesBundle"
-                  joins:
-                      - ["e0.rootcategory", "f"]
-                  where_caluse:         "f.id = :id"
-
-             get_rootcategories:
-                  title:               "root categories"
-                  description:         "get all root categories"
-                  select_table:         "Category"
-                  select_table_bundle:  "WiechertDataTablesBundle"
-                  joins:
-                      - ["e0.subcategories", "f"]
-                  where_caluse:         "f.id = :id"
-
-             get_products:
-                  title:              "every product of this category"
-                  description:        "list all producs of this category"
-                  select_table:         "Product"
-                  select_table_bundle:  "WiechertDataTablesBundle"
-                  joins:
-                      - ["e0.categories", "f"]
-                  where_caluse:         "f.id = :id"
-
-        Order:
-             get_positions:
-                  title:               "Positions of the order"
-                  description:         "get all positions"
-                  select_table:         "Position"
-                  select_table_bundle:  "WiechertDataTablesBundle"
-                  joins:
-                       - ["e0.order", "f"]
-                  where_caluse:         "f.id = :id"
-
-        Product:
-             get_categories:
-                  title:               "Categories of the product"
-                  description:         "get all categories"
-                  select_table:         "Category"
-                  select_table_bundle:  "WiechertDataTablesBundle"
-                  joins:
-                       - ["e0.products", "f"]
-                  where_caluse:         "f.id = :id"
 
 
 
