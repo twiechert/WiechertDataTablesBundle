@@ -56,7 +56,7 @@ use Doctrine\ORM\Mapping as ORM;
     
     /**
      * @ORM\ManyToMany(targetEntity="Category", inversedBy="products")
-     * @ORM\JoinTable(name="article_category_relation",
+     * @ORM\JoinTable(name="product_category_relation",
      *                joinColumns={@ORM\JoinColumn(name="f_product_id", referencedColumnName="id")},
      *                inverseJoinColumns={@ORM\JoinColumn(name="f_category_id", referencedColumnName="id")})
      * @Serializer\Groups({"ComplexeReference"})

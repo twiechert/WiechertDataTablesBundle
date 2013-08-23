@@ -1,17 +1,28 @@
 WiechertDataTablesBundle
 ========================
 
-Extension for easily generating DataTables from Doctrine entities.
+This bundle can generate a [DataTable](https://datatables.net/ "DataTables Plugin") (the jQuery Plugin) from a Doctrine entity and handles the
+server-side progressing. The **WiechertDataTablesBundle** has further interesting features that are covered in the example section.
+
+![](http://public.softwareentwicklung-wiechert.de/documentation/Datatables/position-separation-explination.png)
+
+# Table of contents
+- Core Features
+- Installation
+- Example
+- Customize view
+- Configuration Reference
 
 # Core Features
 
-- let the bundle generate DataTables for a given Doctrine entity
-- use exclusion strategies to customize the output
-- define actions that can be applied to an entity/row
+- let the bundle generate DataTables for a given Doctrine entity and
+- server-side searching, sorting, JSON serialization
+- customizable views using exclusion strategies
+- the EntityDisplayer creates a readable view for your entities and shows additional information using NamedDatatables
 
-TODO
-- describe installation
-- configuration reference
+
+
+# Installation
 
 # Example
 
@@ -78,7 +89,7 @@ namespace Wiechert\DataTablesBundle\Entity;
       	protected $rootcategory;
 
       	/**
-      	 * @ORM\ManyToMany(targetEntity="Product", inversedBy="categories")
+      	 * @ORM\ManyToMany(targetEntity="Product", mappedBy="categories")
       	 * @Serializer\Groups({"ComplexeReference"})
       	 * @DisplayName(name="Products")
       	 */
@@ -238,9 +249,11 @@ wiechert_data_tables:
 
 ####2.1 Define PHP-Actions
 
-Most of it is self-explaining. Let me explain the array PHPActions. A PHPAction can be any kind of action (in a Symfony Controler), that is named. An action could be a deleteAction that deletes an entity.
+Most of it is self-explaining. Let me explain the array PHPActions. A PHPAction can be any kind of action (in a Symfony Controler), that is named. An action could be a `deleteAction` that deletes an entity.
 
 An action can be applied to every entity within a DataTable. A list of all available actions per entity is rendered as a dropdown list in the DataTable:
+
+![](http://public.softwareentwicklung-wiechert.de/documentation/Datatables/category-search.png)
 
 When the bundle invokes that action, it passes the entity's name, its bundle name, its identifier and the name of the used exclusion strategy. You controller may not need all the information - therefore it's not mandatory to implement that interface.
 An example:
@@ -274,9 +287,9 @@ An example:
     ..
 ```
 
-####2.2 Define named Datatables
+####2.2 Define NamedDatatables
 
-A good feature are named Datatables. These Datatables display additional information on a  certain entity.
+An interesting feature are  NamedDatatables. These Datatables display additional information on a  certain entity.
 The given configuration allows the bundle to display all subcategories of a given category or all related products.
 
 #####Other scenarios:
@@ -284,8 +297,15 @@ The given configuration allows the bundle to display all subcategories of a give
 - display orders that contain a certain product
 - display all users of a group ...
 
-Simply configure a chain of Left-Joins, starting from the entity you actually want to display(!).
+Simply configure a chain of left joins, starting from the entity you actually want to display(!).
 
+The NamedDatatables are listed when using the **EntityDisplayer**. The EntityDisplayer generates a readable view for a given entity. This view shows the entity's properties and all related NamedDatatables:
+
+#####EntityDisplayer for a Product:
+![](http://public.softwareentwicklung-wiechert.de/documentation/EntityDisplayer/product-example.png)
+
+#####EntityDisplayer for a Category:
+![](http://public.softwareentwicklung-wiechert.de/documentation/EntityDisplayer/category-example.png)
 
 ###3. Display your DataTables:
 
@@ -298,7 +318,11 @@ The route is: `http://local.test/app_dev.php/~/datatable/generate/{bundle}/{enti
 
 Example: `http://local.test/app_dev.php/datatable/generate/WiechertDataTablesBundle/Category/Extended`
 
-# Customize output
+The EntityDisplayer can either be applied as an action or alternatively use the route
+
+`http://local.test/app_dev.php/~/datatable/display/{bundle}/{entity}/{strategy}/id`
+
+# Customize view
 
 ###1. Usage of exclusion strategies
 

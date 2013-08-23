@@ -1,7 +1,8 @@
+
 <?php
-/**
- * @author Tayfun Wiechert <tayfun.wiechert@gmail.com>
- */
+/*
+
+
 namespace Wiechert\DataTablesBundle\Tests\Reflection;
 
 use Wiechert\DataTablesBundle\TableGenerator\EntityReflection\Creation\EntityReflectionFactory;
@@ -111,3 +112,6 @@ class ReflectorTest extends \PHPUnit_Framework_TestCase{
     }
 
 }
+/**
+ * @author Tayfun Wiechert <tayfun.wiechert@gmail.com>
+ */

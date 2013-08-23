@@ -64,12 +64,11 @@ class Category
     protected $rootcategory;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Product", inversedBy="categories")
+     * @ORM\ManyToMany(targetEntity="Product", mappedBy="categories")
      * @Serializer\Groups({"ComplexeReference"})
      * @DisplayName(name="Products")
      */
     protected $products;
-
 
 
 
@@ -102,6 +101,7 @@ class Category
     {
         $this->label = $label;
     
+
         return $this;
     }
 
