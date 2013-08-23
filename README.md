@@ -4,6 +4,7 @@ WiechertDataTablesBundle
 This bundle can generate a [DataTable](https://datatables.net/ "DataTables Plugin") (the jQuery Plugin) from a Doctrine entity and handles the
 server-side progressing. The **WiechertDataTablesBundle** has further interesting features that are covered in the example section.
 
+#####DataTable generated for a position (of an order):
 ![](http://public.softwareentwicklung-wiechert.de/documentation/Datatables/position-separation-explination.png)
 
 # Table of contents
@@ -24,12 +25,34 @@ server-side progressing. The **WiechertDataTablesBundle** has further interestin
 
 # Installation
 
+###1. Download via composer:
+
+
+###2. Allow routing:
+
+You have to allow the bundle's routing configuration. Add the following code to your routing.yml
+
+```
+wiechert_data_tables:
+	resource: "@WiechertDataTablesBundle/Controller/"
+    type:     annotation
+    prefix:   /
+```
+
+Feel free to customize the prefix.
+
+
+###3. Configuration:
+
+Please work trough the example section and create a configuration file applicable to your use case.
+
 # Example
 
-###1. Annotate your entities:
+###1. Annotate your entity classes:
 
-There could be an entity `Category` that points to the user who is its creator. We use the default Doctrine annotations and an annotation called `DisplayName` plus `Groups`.
+There could be an entity class `Category` that points to a  `user` who is its creator. We use the default Doctrine annotations and additionally annotations called `DisplayName` and `Groups`.
 
+#####Annotating the category class:
 ```php
 <?php
   
@@ -100,6 +123,7 @@ namespace Wiechert\DataTablesBundle\Entity;
 
 ```
 	
+#####Annotating the user class:
 ``` php
 	
 <?php
@@ -311,16 +335,20 @@ The NamedDatatables are listed when using the **EntityDisplayer**. The EntityDis
 
 The route is: `http://local.test/app_dev.php/~/datatable/generate/{bundle}/{entity}/{strategy}`
 
-- bundle, entity: as configured
-- strategy: name of exclusion strategy (predefined: Simple or Extended)
+- {bundle}, {entity}: as configured
+- {strategy}: name of exclusion strategy (predefined: Simple or Extended, or your own implementation)
 
 (whereas ~ has be replaced by your defined suffix)
 
-Example: `http://local.test/app_dev.php/datatable/generate/WiechertDataTablesBundle/Category/Extended`
+**Example:** `http://local.test/app_dev.php/datatable/generate/WiechertDataTablesBundle/Category/Extended`
 
-The EntityDisplayer can either be applied as an action or alternatively use the route
+The EntityDisplayer can either be applied as an action or alternatively call it using the route:
 
-`http://local.test/app_dev.php/~/datatable/display/{bundle}/{entity}/{strategy}/id`
+`http://local.test/app_dev.php/~/datatable/display/{bundle}/{entity}/{strategy}/{id}`
+
+**Example:** `http://local.test/app_dev.php/datatable/display/WiechertDataTablesBundle/Product/Simple/2`
+
+- id: the entity's identifier (has to be named id)
 
 # Customize view
 
