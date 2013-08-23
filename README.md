@@ -1,10 +1,10 @@
 WiechertDataTablesBundle
 ========================
 
-This bundle can generate a [DataTable](https://datatables.net/ "DataTables Plugin") (the jQuery Plugin) from a Doctrine entity and handles the
+This Symfony 2 Bundle can generate a [DataTable](https://datatables.net/ "DataTables Plugin") (the jQuery Plugin) from a Doctrine entity and handles the
 server-side progressing. The **WiechertDataTablesBundle** has further interesting features that are covered in the example section.
 
-#####DataTable generated for a position (of an order):
+#####DataTable generated for a position (of an order and its referenced entities):
 ![](http://public.softwareentwicklung-wiechert.de/documentation/Datatables/position-separation-explination.png)
 
 # Table of contents
@@ -50,7 +50,7 @@ Please work trough the example section and create a configuration file applicabl
 
 ###1. Annotate your entity classes:
 
-There could be an entity class `Category` that points to a  `user` who is its creator. We use the default Doctrine annotations and additionally annotations called `DisplayName` and `Groups`.
+There could be an entity class `Category` that points to a class  `User` who is its creator. We use the default Doctrine annotations and additionally annotations called `DisplayName` and `Groups`.
 
 #####Annotating the category class:
 ```php
@@ -177,21 +177,21 @@ namespace Wiechert\DataTablesBundle\Entity;
 
 ```
 	
-The `DisplayName` annotation allows you to specify the column label and is optional.
+The `DisplayName` annotation allows you to specify the label of the rendered column and is optional.
 By default the bundle will use the attributes name.
 	
-To customize which attributes and entities will be displayed you can use exclusion strategies (which will be explained later on) Such a strategy defines groups. 
+To customize which properties and entities will be displayed you can use exclusion strategies (which will be explained more detailed later on). Our approach is to **assign properties to groups** using the `Groups` annotation.Then we use an exclusion strategie that will decide based on the properties group(s), whether to reflect it it or not.
 	
 ###2. Create a configuration file:
 
 The bundle needs a configuration file that defines which entities can be displayed, where to find them, which actions can be applied and so on (see Configuration Reference).
-Reference the configuration file in you app/config.yml
+Create an empty configuration file and reference it in you app/config.yml:
 
 ```
 imports:
    - { resource: "@Bundle/Resources/config/yourfile.yml" }
 ```
-The configuration file for the scenario could look like:
+A configuration file for the given scenario could look like:
 ```
 wiechert_data_tables:
     Datatables:
@@ -273,18 +273,21 @@ wiechert_data_tables:
 
 ####2.1 Define PHP-Actions
 
-Most of it is self-explaining. Let me explain the array PHPActions. A PHPAction can be any kind of action (in a Symfony Controler), that is named. An action could be a `deleteAction` that deletes an entity.
+Most of it is self-explaining. Let me explain the array PHPActions. A PHPAction can be any kind of action (in a Symfony Controler), that is named. An action could be a `deleteEntityByIdAction` that deletes an entity.
+An action applicable for a Category could be `createSubcatetegoryAction` that renders in form allowing you to
+add a sub-category.
 
 An action can be applied to every entity within a DataTable. A list of all available actions per entity is rendered as a dropdown list in the DataTable:
 
 ![](http://public.softwareentwicklung-wiechert.de/documentation/Datatables/category-search.png)
 
 When the bundle invokes that action, it passes the entity's name, its bundle name, its identifier and the name of the used exclusion strategy. You controller may not need all the information - therefore it's not mandatory to implement that interface.
-An example:
+
+#####Example: a delete action:
 
 ```php
  ...
-    public function genericDeleteAction($bundle, $entity, $id)
+    public function deleteEntityAction($bundle, $entity, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -313,15 +316,15 @@ An example:
 
 ####2.2 Define NamedDatatables
 
-An interesting feature are  NamedDatatables. These Datatables display additional information on a  certain entity.
-The given configuration allows the bundle to display all subcategories of a given category or all related products.
+An interesting feature are  NamedDatatables. These DataTables display additional information on a  certain entity.
+The given configuration allows the bundle to display all subcategories of a given category or all related products (`get_subcategories`).
 
-#####Other scenarios:
+#####Other possible scenarios:
 - display all positions of an order
 - display orders that contain a certain product
 - display all users of a group ...
 
-Simply configure a chain of left joins, starting from the entity you actually want to display(!).
+Simply configure a chain of inner joins, starting from the entity you actually want to display(!).
 
 The NamedDatatables are listed when using the **EntityDisplayer**. The EntityDisplayer generates a readable view for a given entity. This view shows the entity's properties and all related NamedDatatables:
 
