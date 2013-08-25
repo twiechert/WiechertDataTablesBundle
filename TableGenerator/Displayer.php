@@ -7,10 +7,10 @@
 namespace Wiechert\DataTablesBundle\TableGenerator;
 
 
-use Wiechert\DataTablesBundle\TableGenerator\EntityReflection\IEntityReflector;
-use Wiechert\DataTablesBundle\TableGenerator\EntityReflection\IReflector;
-use Wiechert\DataTablesBundle\TableGenerator\EntityReflection\Transformation\CountPerEntityTransformer;
-use Wiechert\DataTablesBundle\TableGenerator\EntityReflection\Transformation\GraphResolveTransformer;
+use Wiechert\DataTablesBundle\EntityReflection\IEntityReflector;
+use Wiechert\DataTablesBundle\EntityReflection\IReflector;
+use Wiechert\DataTablesBundle\EntityReflection\Transformation\CountPerEntityTransformer;
+use Wiechert\DataTablesBundle\EntityReflection\Transformation\GraphResolveTransformer;
 use Wiechert\DataTablesBundle\Util\ArrayAccessor;
 
 abstract class Displayer
@@ -141,7 +141,7 @@ abstract class Displayer
 
 
     /**
-     * @return \Wiechert\DataTablesBundle\TableGenerator\EntityReflection\IReflectionContext
+     * @return \Wiechert\DataTablesBundle\EntityReflection\IReflectionContext
      */
     public function getBaseContext()
     {

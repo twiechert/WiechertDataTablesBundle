@@ -1,14 +1,10 @@
 <?php
 
 /**
- * Diese Klasse kann den nötigen HTML-Code, sowie das nötige JavaScript generieren,
- * welches für die Generierung einer Datatable (zu einem Doctrine-Repositry gehörend) notwendig ist.
+ * This class is accessible as a service and uses the result of an entity reflection to generate
+ * HTML and JavaScript needed for the DataTable creation.
  *
- * Die Klasse ist als Service implementiert und erwartet den Doctrine AnnotationReader sowie den EntityManager.
- * User: Tayfun Wiechert
- * Date: 10.01.13
- * Time: 11:14
- *
+ * @author Tayfun Wiechert <tayfun.wiechert@gmail.com>
  */
 
 namespace Wiechert\DataTablesBundle\TableGenerator;

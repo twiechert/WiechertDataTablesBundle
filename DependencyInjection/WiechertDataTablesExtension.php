@@ -7,7 +7,6 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\Yaml\Yaml;
-use Wiechert\DataTablesBundle\Configuration\DataTablesConfiguration;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -25,7 +24,7 @@ class WiechertDataTablesExtension extends Extension
         $loader->load('services.yml');
         $configs[] = Yaml::parse(  $loader->getLocator()->locate("config.yml"));
 
-        $dataTablesconfiguration = new DataTablesConfiguration();
+        $dataTablesconfiguration = new Configuration();
         $dataTableconfig = $this->processConfiguration($dataTablesconfiguration, $configs);
 
 

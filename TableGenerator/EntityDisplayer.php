@@ -1,17 +1,10 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: Tayfun
- * Date: 12.08.13
- * Time: 17:58
- * To change this template use File | Settings | File Templates.
- */
+
 
 namespace Wiechert\DataTablesBundle\TableGenerator;
 
 use Metadata\MetadataFactoryInterface;
 use Symfony\Component\Yaml\Yaml;
-use Wiechert\DataTablesBundle\TableGenerator\EntityReflection\EntityTree;
 use Wiechert\DataTablesBundle\Util\Appender;
 
 class EntityDisplayer extends Displayer {

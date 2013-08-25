@@ -1,4 +1,4 @@
 Strategies:
-    Extended: "Wiechert\\DataTablesBundle\\TableGenerator\\EntityReflection\\Strategies\\ExtendedStrategy"
-    Simple:   "Wiechert\\DataTablesBundle\\TableGenerator\\EntityReflection\\Strategies\\SimpleStrategy"
-    Default: "Wiechert\\DataTablesBundle\\TableGenerator\\EntityReflection\\Strategies\\SimpleStrategy"
+    Extended: "Wiechert\\DataTablesBundle\\EntityReflection\\Strategies\\ExtendedStrategy"
+    Simple:   "Wiechert\\DataTablesBundle\\EntityReflection\\Strategies\\SimpleStrategy"
+    Default: "Wiechert\\DataTablesBundle\\EntityReflection\\Strategies\\SimpleStrategy"

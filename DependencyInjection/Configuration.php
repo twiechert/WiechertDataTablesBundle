@@ -1,29 +1,111 @@
 <?php
-
 namespace Wiechert\DataTablesBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-/**
- * This is the class that validates and merges configuration from your app/config files
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
- */
-class Configuration implements ConfigurationInterface
-{
-    /**
-     * {@inheritDoc}
-     */
+use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+
+
+class Configuration implements ConfigurationInterface{
+
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('wiechert_data_tables');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+                ->arrayNode('Bundles')
+                    ->prototype('array')
+                        ->children()
+                            ->scalarNode('namespace')->end()
+                            ->arrayNode('Tables')
+                                ->prototype('array')
+                                    ->children()
+                                          ->scalarNode('title')->end()
+                                          ->scalarNode('display_name')->end()
+                                          ->arrayNode('Actions')
+                                              ->children()
+                                                    ->arrayNode('JSActions')
+                                                        ->treatNullLike(array('enabled' => false))
+                                                            ->prototype('array')
+                                                                    ->children()
+                                                                            ->scalarNode('name')->end()
+                                                                            ->scalarNode('route')->end()
+                                                                    ->end()
+                                                            ->end()
+                                                    ->end()
 
+                                                    ->arrayNode('PHPActions')
+                                                        ->treatNullLike(array('enabled' => false))
+                                                            ->prototype('array')
+                                                                  ->children()
+                                                                        ->scalarNode('name')->end()
+                                                                        ->scalarNode('route')->end()
+                                                                  ->end()
+                                                            ->end()
+                                                    ->end()
+                                               ->end()
+                                           ->end()
+
+                                          ->arrayNode('GlobalActions')
+                                              ->treatNullLike(array('enabled' => false))
+                                                  ->children()
+                                                         ->arrayNode('JSActions')
+                                                             ->treatNullLike(array('enabled' => false))
+                                                                 ->prototype('array')
+                                                                     ->children()
+                                                                            ->scalarNode('name')->end()
+                                                                            ->scalarNode('route')->end()
+                                                                     ->end()
+                                                                 ->end()
+                                                         ->end()
+
+
+                                                         ->arrayNode('PHPActions')
+                                                             ->treatNullLike(array('enabled' => false))
+                                                                 ->prototype('array')
+                                                                     ->children()
+                                                                                ->scalarNode('name')->end()
+                                                                                ->scalarNode('route')->end()
+                                                                     ->end()
+                                                                 ->end()
+                                                         ->end()
+
+                                                  ->end()
+                                          ->end()
+                                          ->arrayNode('NamedTables')
+                                                ->prototype('array')
+                                                    ->children()
+                                                        ->scalarNode('title')->end()
+                                                        ->scalarNode('description')->end()
+                                                        ->scalarNode('select_table')->end()
+                                                        ->scalarNode('select_table_bundle')->end()
+                                                        ->arrayNode('joins')
+                                                            ->prototype('array')
+                                                                ->children()
+                                                                    ->scalarNode('join')->end()
+                                                                    ->scalarNode('alias')->end()
+                                                                ->end()
+                                                            ->end()
+                                                        ->end()
+                                                        ->scalarNode('where_caluse')->end()
+                                                    ->end()
+                                                ->end()
+                                          ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                    ->end()
+                ->end()
+
+            ->end()->arrayNode('Strategies')
+            ->prototype('scalar')->end()
+            ->end()
+        ->end();
         return $treeBuilder;
     }
+//             ->prototype('array');
+
+
 }
