@@ -11,10 +11,10 @@ use JMS\Serializer\Exclusion\ExclusionStrategyInterface;
 use JMS\Serializer\Metadata\ClassMetadata;
 use JMS\Serializer\Metadata\PropertyMetadata;
 use JMS\Serializer\NavigatorContext;
-use Wiechert\DataTablesBundle\TableGenerator\EntityReflection\Creation\IEntityReflectorFactory;
-use Wiechert\DataTablesBundle\TableGenerator\EntityReflection\EntityReflector;
-use Wiechert\DataTablesBundle\TableGenerator\EntityReflection\ReflectionContext;
-use Wiechert\DataTablesBundle\TableGenerator\EntityReflection\Strategies\IExclusionStrategy;
+use Wiechert\DataTablesBundle\EntityReflection\Creation\IEntityReflectorFactory;
+use Wiechert\DataTablesBundle\EntityReflection\EntityReflector;
+use Wiechert\DataTablesBundle\EntityReflection\ReflectionContext;
+use Wiechert\DataTablesBundle\EntityReflection\Strategies\IExclusionStrategy;
 
 class StrategyTypeAdapter implements ExclusionStrategyInterface
 {
