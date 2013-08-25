@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Wiechert\DataTablesBundle\Serializer\StrategyTypeAdapter;
 use Wiechert\DataTablesBundle\Serializer\TreeGroupExclusionStrategyTypeAdapter;
-use Wiechert\DataTablesBundle\TableGenerator\EntityReflection\Transformation\DoctrineQueryTransformer;
+use Wiechert\DataTablesBundle\EntityReflection\Transformation\DoctrineQueryTransformer;
 use Wiechert\DataTablesBundle\Util\ArrayAccessor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -172,7 +172,7 @@ class DataTablesController extends Controller
         }
 
         $exclusionStrategy = new $exclusionStrategy();
-        $reflector = $this->get('wiechert.datatables.tablegenerator.entityreflection.reflector');
+        $reflector = $this->get('wiechert.datatables.entityreflection.reflector');
         $reflector->setExclusionStrategy($exclusionStrategy);
 
         if ($name != null && $id != null) {
@@ -227,7 +227,7 @@ class DataTablesController extends Controller
             'iTotalDisplayRecords' => $filtered_count . '',
             'aaData' => $objects);
 
-        $entityreflectorfactory = $this->container->get('wiechert.datatables.tablegenerator.entityreflection.creation.entityreflectionfactory');
+        $entityreflectorfactory = $this->container->get('wiechert.datatables.entityreflection.creation.entityreflectorfactory');
 
         $this->container
             ->get('serializer')

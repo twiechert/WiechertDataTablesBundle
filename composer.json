@@ -18,6 +18,17 @@
         "friendsofsymfony/jsrouting-bundle": "~1.1",
         "jms/serializer-bundle": "0.11"
     },
+
+    "scripts": {
+        "post-install-cmd": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+        ],
+        "post-update-cmd": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+        ]
+    },
    
     "minimum-stability": "dev",
     "autoload": {
