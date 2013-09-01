@@ -25,8 +25,24 @@ server-side progressing. The **WiechertDataTablesBundle** has further interestin
 
 # Installation
 
-###1. Download via composer:
+###1. Install via composer:
 
+Add the bundle to your dependencies in the composer.json.
+
+```
+  "require": {
+		...
+		"wiechert/datatables-bundle": "dev-master",
+		...
+    },
+```
+
+Run the following command in a shell to install  the **WiechertDataTablesBundle** and its dependencies:
+
+
+```
+php composer.phar update wiechert/datatables-bundle
+```
 
 ###2. Allow routing:
 
@@ -37,12 +53,34 @@ wiechert_data_tables:
 	resource: "@WiechertDataTablesBundle/Controller/"
     type:     annotation
     prefix:   /
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 ```
 
 Feel free to customize the prefix.
 
+###3. Allow Twig asset management:
 
-###3. Configuration:
+The bundle uses asset manegment of Twig, which has to be allowed in your config.yml
+
+```
+assetic:
+	...
+    bundles:        [ WiechertDataTablesBundle ]
+```
+
+###4. Update your AppKernel.php:
+
+Make sure that your AppKernel.php registers the following bundles:
+
+```
+new JMS\SerializerBundle\JMSSerializerBundle(),
+new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+new Wiechert\DataTablesBundle\WiechertDataTablesBundle(),
+```
+
+###4. Configuration:
 
 Please work trough the example section and create a configuration file applicable to your use case.
 

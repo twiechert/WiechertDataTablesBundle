@@ -19,6 +19,10 @@
         "jms/serializer-bundle": "0.11"
     },
 
+    "require-dev": {
+        "mockery/mockery": "dev-master@dev"
+    },
+
     "scripts": {
         "post-install-cmd": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets"

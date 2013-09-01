@@ -8,6 +8,7 @@
 namespace Wiechert\DataTablesBundle\EntityReflection\Reflector;
 
 
+use Wiechert\DataTablesBundle\Annotations\DisplayName;
 use Wiechert\DataTablesBundle\EntityReflection\IEntityReflector;
 use Wiechert\DataTablesBundle\EntityReflection\Reader\IAnnotationReader;
 
@@ -88,7 +89,7 @@ abstract class BaseEntityReflector implements Reflectable
         if ($this->label == null) {
 
             $displayAnnotation = $this->annotationReader->readMemberAnnotation($this->reflector, self::DISPLAYNAMEANNOTATIONCLASS);
-            return ($displayAnnotation !== null) ? $displayAnnotation->getName() :
+            return ($displayAnnotation instanceof DisplayName) ? $displayAnnotation->getName() :
                 $this->getName();
         }
 

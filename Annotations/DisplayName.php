@@ -17,12 +17,13 @@ use Doctrine\Common\Annotations\Annotation;
  */
 final class DisplayName extends Annotation
 {
-   public $name = "Name";
+  public $name = "Name";
 
-   public function getName()
-   {
-       return $this->name;
-   }
+
+  public function getName()
+  {
+     return $this->name;
+    }
 
 
 }
