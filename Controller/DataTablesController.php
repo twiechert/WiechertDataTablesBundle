@@ -66,7 +66,7 @@ class DataTablesController extends Controller
 
             $tableGenerator->initialize();
 
-            return $this->render('WiechertDataTablesBundle:helper:generic-table-renderer-ajax.html.twig', array('tableGenerator' => $tableGenerator,
+            return $this->render('WiechertDataTablesBundle:DataTables:generic-table-renderer-ajax.html.twig', array('tableGenerator' => $tableGenerator,
                 'title' => $entityConfiguration['display_name'],
                 'entityName' => $entity));
 
@@ -133,7 +133,7 @@ class DataTablesController extends Controller
             $tableGenerator->initialize();
 
 
-            return $this->render('WiechertDataTablesBundle:Helper:generic-table-renderer-ajax.html.twig', array('tableGenerator' => $tableGenerator,
+            return $this->render('WiechertDataTablesBundle:DataTables:generic-table-renderer-ajax.html.twig', array('tableGenerator' => $tableGenerator,
                 'title' => "test",
                 'entityName' => $entity));
         } else {

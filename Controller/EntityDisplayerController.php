@@ -80,7 +80,7 @@ class EntityDisplayerController extends Controller
             }
 
 
-            return $this->render('WiechertDataTablesBundle:Helper:generic-entity-renderer.html.twig',
+            return $this->render('WiechertDataTablesBundle:EntityDisplayer:generic-entity-renderer.html.twig',
                 array('entityDisplayer' => $entityDisplayer,
                       'entity' => $object,
                       'entityName' => $entity,
